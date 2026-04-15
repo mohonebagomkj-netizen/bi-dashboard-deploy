@@ -207,7 +207,34 @@
         </div>
 
         <!-- 3日趋势图 -->
-        <div class="charts-grid">
+        
+        <!-- 与上周同期对比 -->
+        <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 24px; margin-bottom: 30px;">
+            <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #60a5fa;">📅 与上周同期对比（周二 vs 周二）</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">DAU 环比</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #22c55e;">-0.5%</div>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">基本持平 ✅</div>
+                </div>
+                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">充值环比</div>
+                    <div style="font-size: 28px; font-weight: 700; color: #22c55e;">+0.6%</div>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">企稳回升 ⭐</div>
+                </div>
+                <div style="background: rgba(96, 165, 250, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">上周二</div>
+                    <div style="font-size: 20px; font-weight: 700; color: #60a5fa;">DAU 293,295</div>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">充值 ¥24,820</div>
+                </div>
+                <div style="background: rgba(167, 139, 250, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
+                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">本周二</div>
+                    <div style="font-size: 20px; font-weight: 700; color: #a78bfa;">DAU 291,905</div>
+                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">充值 ¥24,970</div>
+                </div>
+            </div>
+        </div>
+<div class="charts-grid">
             <div class="chart-card">
                 <div class="chart-title">📈 近3日 DAU 趋势</div>
                 <canvas id="trendDAU"></canvas>
@@ -272,6 +299,13 @@
         <div class="chart-card">
             <div class="chart-title">💰 各平台 ARPU 对比（4/14）</div>
             <canvas id="arpuChart"></canvas>
+        </div>
+
+        
+        <!-- 周期规律分析 -->
+        <div class="chart-card" style="grid-column: 1 / -1;">
+            <div class="chart-title">📊 近8周周期规律（平均值）</div>
+            <canvas id="weeklyPatternChart"></canvas>
         </div>
 
         <!-- 导出按钮 -->
@@ -497,6 +531,96 @@
             },
             options: chartConfig
         });
+
+        
+        // 周期规律图表
+        new Chart(document.getElementById('weeklyPatternChart'), {
+            type: 'line',
+            data: {
+                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+                datasets: [
+                    {
+                        label: 'DAU (千)',
+                        data: [85.9, 86.0, 88.7, 87.3, 101.6, 117.2, 114.0],
+                        borderColor: '#60a5fa',
+                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: '新增 (千)',
+                        data: [23.2, 23.0, 23.5, 23.3, 30.3, 38.3, 33.6],
+                        borderColor: '#a78bfa',
+                        backgroundColor: 'rgba(167, 139, 250, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: '充值 (千元)',
+                        data: [10.1, 8.3, 9.6, 8.5, 10.7, 11.4, 12.1],
+                        borderColor: '#22c55e',
+                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                        tension: 0.4,
+                        yAxisID: 'y1'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { labels: { color: '#e2e8f0' } },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.y !== null) {
+                                    label += context.parsed.y.toFixed(1);
+                                }
+                                return label;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
+                        title: {
+                            display: true,
+                            text: 'DAU / 新增 (千)',
+                            color: '#94a3b8'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        ticks: { color: '#94a3b8' },
+                        grid: { display: false },
+                        title: {
+                            display: true,
+                            text: '充值 (千元)',
+                            color: '#94a3b8'
+                        }
+                    },
+                    x: {
+                        ticks: { color: '#94a3b8' },
+                        grid: { color: 'rgba(148, 163, 184, 0.1)' }
+                    }
+                }
+            }
+        });
+
 
         // 平台筛选功能
         function filterPlatform(platform) {
