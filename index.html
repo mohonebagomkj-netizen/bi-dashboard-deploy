@@ -3,756 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四平台数据看板 - 2026-04-14 (增强版)</title>
+    <title>四平台数据汇总_20260415</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            color: #e2e8f0;
-            padding: 20px;
-            min-height: 100vh;
-        }
-        .container { max-width: 1600px; margin: 0 auto; }
-        
-        /* Header */
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.1);
-        }
-        .header h1 {
-            font-size: 32px;
-            font-weight: 600;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-            animation: fadeIn 0.6s ease-in;
-        }
-        
-        /* 平台筛选器 */
-        .filter-bar {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-            flex-wrap: wrap;
-        }
-        .filter-btn {
-            padding: 8px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            background: rgba(30, 41, 59, 0.6);
-            color: #e2e8f0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .filter-btn:hover {
-            background: rgba(96, 165, 250, 0.2);
-            border-color: #60a5fa;
-        }
-        .filter-btn.active {
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            border-color: transparent;
-        }
-        
-        /* KPI Cards */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .kpi-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 12px;
-            padding: 24px;
-            transition: all 0.3s ease;
-            animation: slideUp 0.5s ease-out;
-        }
-        .kpi-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 24px rgba(96, 165, 250, 0.2);
-        }
-        .kpi-label { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
-        .kpi-value {
-            font-size: 36px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        /* Charts */
-        .charts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        .chart-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 12px;
-            padding: 24px;
-            animation: fadeIn 0.8s ease-out;
-        }
-        .chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 16px;
-            color: #f1f5f9;
-        }
-        
-        /* Insights */
-        .insight-card {
-            background: rgba(30, 41, 59, 0.6);
-            border: 1px solid rgba(148, 163, 184, 0.1);
-            border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 20px;
-        }
-        .insight-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
-        .insight-item {
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 4px;
-            border-left: 3px solid;
-        }
-        
-        /* Export Button */
-        .export-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-            color: white;
-            border: none;
-            border-radius: 24px;
-            cursor: pointer;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
-            transition: all 0.3s ease;
-        }
-        .export-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(96, 165, 250, 0.6);
-        }
-        
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            .header h1 { font-size: 24px; }
-            .kpi-value { font-size: 28px; }
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: linear-gradient(135deg, #0f1419 0%, #1a2332 100%); color: #e8eaed; padding: 20px; }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { font-size: 32px; font-weight: 700; color: #60a5fa; margin-bottom: 10px; }
+        .header .date { font-size: 14px; color: #9ca3af; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); border-radius: 12px; padding: 20px; border: 1px solid #475569; }
+        .kpi-card .label { font-size: 14px; color: #94a3b8; margin-bottom: 8px; }
+        .kpi-card .value { font-size: 32px; font-weight: 700; color: #60a5fa; margin-bottom: 8px; }
+        .kpi-card .change { font-size: 14px; }
+        .change.up { color: #10b981; }
+        .change.down { color: #ef4444; }
+        .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .chart-card { background: #1e293b; border-radius: 12px; padding: 20px; border: 1px solid #475569; }
+        .chart-card h3 { font-size: 18px; color: #e8eaed; margin-bottom: 20px; }
+        .analysis { background: #1e293b; border-radius: 12px; padding: 25px; border: 1px solid #475569; margin-bottom: 20px; }
+        .analysis h2 { font-size: 20px; color: #60a5fa; margin-bottom: 15px; }
+        .analysis-item { margin-bottom: 15px; padding-left: 15px; border-left: 3px solid #60a5fa; }
+        .analysis-item h4 { color: #e8eaed; margin-bottom: 5px; font-size: 16px; }
+        .analysis-item p { color: #94a3b8; font-size: 14px; line-height: 1.6; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>四平台数据看板（增强版）</h1>
-            <div style="font-size: 18px; color: #94a3b8;">2026-04-14</div>
-            
-            <!-- 平台筛选器 -->
-            <div class="filter-bar">
-                <button class="filter-btn active" onclick="filterPlatform('全部')">全部</button>
-                <button class="filter-btn" onclick="filterPlatform('TikTok')">TikTok</button>
-                <button class="filter-btn" onclick="filterPlatform('小红书')">小红书</button>
-                <button class="filter-btn" onclick="filterPlatform('PH·Prem')">PH·Prem</button>
-                <button class="filter-btn" onclick="filterPlatform('铁粉空间')">铁粉空间</button>
-            </div>
+            <h1>🎯 四平台数据汇总</h1>
+            <div class="date">2026年4月15日 | 数据更新时间: 2026-04-16 11:43</div>
         </div>
-
-        <!-- KPI 卡片 -->
+        
         <div class="kpi-grid">
             <div class="kpi-card">
-                <div class="kpi-label">总 DAU</div>
-                <div class="kpi-value">291,905</div>
+                <div class="label">总DAU</div>
+                <div class="value">286,494</div>
+                <div class="change down">
+                    -1.85% 较前日
+                </div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">总新增</div>
-                <div class="kpi-value">91,366</div>
+                <div class="label">总新增</div>
+                <div class="value">86,537</div>
+                <div class="change down">
+                    -5.29% 较前日
+                </div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">总充值</div>
-                <div class="kpi-value">¥24,970</div>
+                <div class="label">总充值</div>
+                <div class="value">¥27,110</div>
+                <div class="change up">
+                    +8.57% 较前日
+                </div>
             </div>
             <div class="kpi-card">
-                <div class="kpi-label">平均 ARPU</div>
-                <div class="kpi-value">¥0.086</div>
+                <div class="label">平均ARPU</div>
+                <div class="value">¥0.0946</div>
+                <div class="change up">+10.51% 较前日</div>
             </div>
         </div>
-
-        <!-- 3日趋势图 -->
         
-        <!-- 与上周同期对比 -->
-        <div style="background: rgba(30, 41, 59, 0.6); border: 1px solid rgba(148, 163, 184, 0.1); border-radius: 12px; padding: 24px; margin-bottom: 30px;">
-            <div style="font-size: 20px; font-weight: 600; margin-bottom: 16px; color: #60a5fa;">📅 与上周同期对比（周二 vs 周二）</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">
-                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">DAU 环比</div>
-                    <div style="font-size: 28px; font-weight: 700; color: #22c55e;">-0.5%</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">基本持平 ✅</div>
-                </div>
-                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">充值环比</div>
-                    <div style="font-size: 28px; font-weight: 700; color: #22c55e;">+0.6%</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">企稳回升 ⭐</div>
-                </div>
-                <div style="background: rgba(96, 165, 250, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">上周二</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #60a5fa;">DAU 293,295</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">充值 ¥24,820</div>
-                </div>
-                <div style="background: rgba(167, 139, 250, 0.1); border-radius: 8px; padding: 16px; text-align: center;">
-                    <div style="color: #94a3b8; font-size: 14px; margin-bottom: 8px;">本周二</div>
-                    <div style="font-size: 20px; font-weight: 700; color: #a78bfa;">DAU 291,905</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">充值 ¥24,970</div>
-                </div>
-            </div>
-        </div>
-<div class="charts-grid">
+        <div class="chart-grid">
             <div class="chart-card">
-                <div class="chart-title">📈 近3日 DAU 趋势</div>
-                <canvas id="trendDAU"></canvas>
+                <h3>📊 各平台DAU分布</h3>
+                <canvas id="dauChart"></canvas>
             </div>
             <div class="chart-card">
-                <div class="chart-title">📈 近3日充值趋势</div>
-                <canvas id="trendCharge"></canvas>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">📈 近3日新增趋势</div>
-                <canvas id="trendNew"></canvas>
-            </div>
-            <div class="chart-card">
-                <div class="chart-title">📈 近3日留存趋势</div>
-                <canvas id="trendRetention"></canvas>
+                <h3>💰 各平台充值收入</h3>
+                <canvas id="chargeChart"></canvas>
             </div>
         </div>
-
-        <!-- 核心洞察 -->
-        <div class="insight-card">
-            <div class="insight-title" style="color: #60a5fa;">🔍 核心洞察</div>
-            <div class="insight-item" style="background: rgba(96, 165, 250, 0.1); border-color: #60a5fa;">
-                <strong>工作日第二天稳步回升：</strong>DAU +1.9%，新增+9.6%，充值持平，工作日流量逐步恢复
-            </div>
-            <div class="insight-item" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-                <strong>自然流量暴涨70%：</strong>自然新增从1.1万飙升至1.9万，占比达20.5%，创4月以来最高水平
-            </div>
-            <div class="insight-item" style="background: rgba(167, 139, 250, 0.1); border-color: #a78bfa;">
-                <strong>TikTok 自然流量翻倍：</strong>自然新增从4,897暴涨至12,503（+155%），带动整体自然流量提升
-            </div>
-            <div class="insight-item" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-                <strong>PH·Prem 充值强劲：</strong>充值收入+20.9%，充值人数+21.2%，逆势增长
-            </div>
-        </div>
-
-        <!-- 风险预警 -->
-        <div class="insight-card" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
-            <div class="insight-title" style="color: #ef4444;">⚠️ 风险预警</div>
-            <div class="insight-item" style="background: rgba(239, 68, 68, 0.1); border-color: #ef4444;">
-                <strong>小红书充值大幅下滑：</strong>充值收入从 ¥4,920 降至 ¥3,670（-25.4%），连续两日下滑，需重点关注
-            </div>
-            <div class="insight-item" style="background: rgba(251, 146, 60, 0.1); border-color: #fb923c;">
-                <strong>观影率持续回落：</strong>从 85.56% 降至 84.26%，工作日用户活跃度略降
-            </div>
-        </div>
-
-        <!-- 优化建议 -->
-        <div class="insight-card" style="background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3);">
-            <div class="insight-title" style="color: #22c55e;">💡 优化建议</div>
-            <div class="insight-item" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-                <strong>1. 分析 TikTok 自然流量暴涨原因：</strong>深挖 SEO 优化、热点事件或口碑传播因素，固化成功经验
-            </div>
-            <div class="insight-item" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-                <strong>2. 排查小红书付费转化问题：</strong>检查运营策略变化、活动到期或用户付费意愿波动
-            </div>
-            <div class="insight-item" style="background: rgba(34, 197, 94, 0.1); border-color: #22c55e;">
-                <strong>3. 复制 PH·Prem 成功经验：</strong>提取近期运营亮点，应用至其他平台
-            </div>
-        </div>
-
-        <!-- ARPU 分析 -->
-        <div class="chart-card">
-            <div class="chart-title">💰 各平台 ARPU 对比（4/14）</div>
-            <canvas id="arpuChart"></canvas>
-        </div>
-
         
-        <!-- 周期规律分析 -->
-        <div class="chart-card" style="grid-column: 1 / -1;">
-            <div class="chart-title">📊 近8周周期规律（平均值）</div>
-            <canvas id="weeklyPatternChart"></canvas>
-        </div>
-
-
-        <!-- 周期规律分析表格 -->
-        <div class="chart-card" style="grid-column: 1 / -1; margin-top: 20px;">
-            <div class="chart-title">📊 近8周周期规律分析（2月18日-4月14日）</div>
-            <table style="width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px;">
-                <tr style="background: rgba(96, 165, 250, 0.2);">
-                    <th style="padding: 10px; text-align: left; color: #e2e8f0;">星期</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">平均DAU</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">较周六</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">平均新增</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">较周六</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">平均充值</th>
-                    <th style="padding: 10px; text-align: right; color: #e2e8f0;">较周六</th>
-                </tr>
-                <tr style="background: rgba(239, 68, 68, 0.1);">
-                    <td style="padding: 8px; color: #e2e8f0;">周一</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">85,895</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-26.7%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">23,151</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-39.5%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">¥10,095</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-11.5%</td>
-                </tr>
-                <tr style="background: rgba(239, 68, 68, 0.1);">
-                    <td style="padding: 8px; color: #e2e8f0;">周二</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">85,967</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-26.6%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">23,020</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-39.8%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">¥8,279</td>
-                    <td style="padding: 8px; text-align: right; color: #ef4444;">-27.4%</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; color: #e2e8f0;">周三</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">88,681</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-24.4%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">23,491</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-38.6%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">¥9,613</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-15.7%</td>
-                </tr>
-                <tr>
-                    <td style="padding: 8px; color: #e2e8f0;">周四</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">87,257</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-25.6%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">23,282</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-39.2%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">¥8,496</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-25.5%</td>
-                </tr>
-                <tr style="background: rgba(251, 146, 60, 0.05);">
-                    <td style="padding: 8px; color: #e2e8f0;">周五</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">101,577</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-13.3%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">30,271</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-20.9%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">¥10,659</td>
-                    <td style="padding: 8px; text-align: right; color: #fb923c;">-6.6%</td>
-                </tr>
-                <tr style="background: rgba(34, 197, 94, 0.1);">
-                    <td style="padding: 8px; color: #e2e8f0; font-weight: 600;">周六 ⭐</td>
-                    <td style="padding: 8px; text-align: right; color: #22c55e; font-weight: 600;">117,214</td>
-                    <td style="padding: 8px; text-align: right; color: #94a3b8;">基准</td>
-                    <td style="padding: 8px; text-align: right; color: #22c55e; font-weight: 600;">38,262</td>
-                    <td style="padding: 8px; text-align: right; color: #94a3b8;">基准</td>
-                    <td style="padding: 8px; text-align: right; color: #22c55e; font-weight: 600;">¥11,410</td>
-                    <td style="padding: 8px; text-align: right; color: #94a3b8;">基准</td>
-                </tr>
-                <tr style="background: rgba(34, 197, 94, 0.1);">
-                    <td style="padding: 8px; color: #e2e8f0;">周日</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">113,969</td>
-                    <td style="padding: 8px; text-align: right; color: #22c55e;">-2.8%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0;">33,623</td>
-                    <td style="padding: 8px; text-align: right; color: #94a3b8;">-12.1%</td>
-                    <td style="padding: 8px; text-align: right; color: #e2e8f0; font-weight: 600;">¥12,080 💰</td>
-                    <td style="padding: 8px; text-align: right; color: #22c55e;">+5.9%</td>
-                </tr>
-            </table>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 16px;">
-                <div style="background: rgba(239, 68, 68, 0.1); border-radius: 6px; padding: 12px; border-left: 3px solid #ef4444;">
-                    <div style="color: #ef4444; font-weight: 600; font-size: 14px;">📉 低谷：周一/周二</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">DAU 8.6万，比周六低26.7%</div>
-                </div>
-                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 6px; padding: 12px; border-left: 3px solid #22c55e;">
-                    <div style="color: #22c55e; font-weight: 600; font-size: 14px;">📈 高峰：周六</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">DAU 11.7万，新增3.8万</div>
-                </div>
-                <div style="background: rgba(34, 197, 94, 0.1); border-radius: 6px; padding: 12px; border-left: 3px solid #22c55e;">
-                    <div style="color: #22c55e; font-weight: 600; font-size: 14px;">💰 最佳变现：周日</div>
-                    <div style="color: #94a3b8; font-size: 12px; margin-top: 4px;">充值¥12,080，比周六高5.9%</div>
-                </div>
+        <div class="analysis">
+            <h2>💡 核心洞察</h2>
+            <div class="analysis-item">
+                <h4>⭐ 小红书爆发式回暖</h4>
+                <p>充值暴涨65.4%(¥3,670→¥6,070),创近期新高。DAU企稳(-0.6%),新增逆势增长(+1.6%),自然新增大幅提升(+15.9%)。连续三日验证企稳趋势,已进入快速恢复通道。</p>
             </div>
-            <div style="margin-top: 12px; padding: 12px; background: rgba(96, 165, 250, 0.1); border-radius: 6px; border-left: 3px solid #60a5fa;">
-                <div style="color: #60a5fa; font-weight: 600; font-size: 14px; margin-bottom: 6px;">💡 策略建议</div>
-                <div style="color: #94a3b8; font-size: 12px; line-height: 1.5;">
-                    • 周一/周二：推出"新周新开始"活动，目标DAU +10%<br>
-                    • 周五-周六：买量预算×1.5，ROI最优时段<br>
-                    • 周日：限时折扣+VIP福利，充值目标+10%
-                </div>
+            <div class="analysis-item">
+                <h4>⭐ 总充值创新高</h4>
+                <p>四平台总充值¥27,110(+8.6%),ARPU提升10.5%。在DAU下降1.9%情况下,充值逆势增长,单用户价值提升,变现效率显著增强。</p>
+            </div>
+            <div class="analysis-item">
+                <h4>⚠️ TikTok自然流量过山车</h4>
+                <p>自然新增从12,503暴跌至5,722(-54.2%),爆款内容热度快速消退。4/14暴涨+155.4%,4/15急速回落,说明爆款生命周期短,需建立持续内容输出机制。</p>
+            </div>
+            <div class="analysis-item">
+                <h4>✅ PH·Prem与铁粉空间稳健增长</h4>
+                <p>PH·Prem: DAU+0.1%, 新增+4.8%, 充值+10.5%, 全面增长。铁粉空间: DAU+2.6%, 新增+5.8%, 活跃数据稳健。</p>
             </div>
         </div>
-        <!-- 导出按钮 -->
-        <button class="export-btn" onclick="exportData()">📥 导出数据</button>
     </div>
-
+    
     <script>
-        // 3天数据
-        const data3Days = {
-            labels: ['4/10', '4/11', '4/14'],
-            TikTok: {
-                dau: [242301, 186366, 192502],
-                charge: [19490, 16760, 17380],
-                new: [81539, 59167, 67277],
-                retention: [19.41, 17.60, null]
-            },
-            '小红书': {
-                dau: [74254, 59607, 58419],
-                charge: [4780, 4920, 3670],
-                new: [18733, 14139, 13524],
-                retention: [16.48, 14.02, null]
-            },
-            'PH·Prem': {
-                dau: [30751, 22806, 23070],
-                charge: [2300, 2200, 2660],
-                new: [5859, 4231, 4585],
-                retention: [18.40, 15.95, null]
-            },
-            '铁粉空间': {
-                dau: [20687, 17828, 17914],
-                charge: [2180, 1090, 1260],
-                new: [7125, 5812, 5980],
-                retention: [20.81, 18.69, null]
-            }
-        };
-
-        // 当前平台 ARPU 数据
-        const arpuData = {
-            TikTok: 0.080,
-            '小红书': 0.064,
-            'PH·Prem': 0.075,
-            '铁粉空间': 0.105
-        };
-
-        // Chart 配置
-        const chartConfig = {
-            responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: { labels: { color: '#e2e8f0' } }
-            },
-            scales: {
-                y: {
-                    ticks: { color: '#94a3b8' },
-                    grid: { color: 'rgba(148, 163, 184, 0.1)' }
-                },
-                x: {
-                    ticks: { color: '#94a3b8' },
-                    grid: { color: 'rgba(148, 163, 184, 0.1)' }
-                }
-            }
-        };
-
-        // DAU 趋势图
-        new Chart(document.getElementById('trendDAU'), {
-            type: 'line',
-            data: {
-                labels: data3Days.labels,
-                datasets: [
-                    {
-                        label: 'TikTok',
-                        data: data3Days.TikTok.dau,
-                        borderColor: '#60a5fa',
-                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
-                        tension: 0.4
-                    },
-                    {
-                        label: '小红书',
-                        data: data3Days['小红书'].dau,
-                        borderColor: '#a78bfa',
-                        backgroundColor: 'rgba(167, 139, 250, 0.1)',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'PH·Prem',
-                        data: data3Days['PH·Prem'].dau,
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        tension: 0.4
-                    },
-                    {
-                        label: '铁粉空间',
-                        data: data3Days['铁粉空间'].dau,
-                        borderColor: '#fb923c',
-                        backgroundColor: 'rgba(251, 146, 60, 0.1)',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: chartConfig
-        });
-
-        // 充值趋势图
-        new Chart(document.getElementById('trendCharge'), {
-            type: 'line',
-            data: {
-                labels: data3Days.labels,
-                datasets: [
-                    {
-                        label: 'TikTok',
-                        data: data3Days.TikTok.charge,
-                        borderColor: '#60a5fa',
-                        tension: 0.4
-                    },
-                    {
-                        label: '小红书',
-                        data: data3Days['小红书'].charge,
-                        borderColor: '#a78bfa',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'PH·Prem',
-                        data: data3Days['PH·Prem'].charge,
-                        borderColor: '#22c55e',
-                        tension: 0.4
-                    },
-                    {
-                        label: '铁粉空间',
-                        data: data3Days['铁粉空间'].charge,
-                        borderColor: '#fb923c',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: chartConfig
-        });
-
-        // 新增趋势图
-        new Chart(document.getElementById('trendNew'), {
-            type: 'line',
-            data: {
-                labels: data3Days.labels,
-                datasets: [
-                    {
-                        label: 'TikTok',
-                        data: data3Days.TikTok.new,
-                        borderColor: '#60a5fa',
-                        tension: 0.4
-                    },
-                    {
-                        label: '小红书',
-                        data: data3Days['小红书'].new,
-                        borderColor: '#a78bfa',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'PH·Prem',
-                        data: data3Days['PH·Prem'].new,
-                        borderColor: '#22c55e',
-                        tension: 0.4
-                    },
-                    {
-                        label: '铁粉空间',
-                        data: data3Days['铁粉空间'].new,
-                        borderColor: '#fb923c',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: chartConfig
-        });
-
-        // 留存趋势图
-        new Chart(document.getElementById('trendRetention'), {
-            type: 'line',
-            data: {
-                labels: ['4/10', '4/11'],
-                datasets: [
-                    {
-                        label: 'TikTok',
-                        data: data3Days.TikTok.retention.slice(0, 2),
-                        borderColor: '#60a5fa',
-                        tension: 0.4
-                    },
-                    {
-                        label: '小红书',
-                        data: data3Days['小红书'].retention.slice(0, 2),
-                        borderColor: '#a78bfa',
-                        tension: 0.4
-                    },
-                    {
-                        label: 'PH·Prem',
-                        data: data3Days['PH·Prem'].retention.slice(0, 2),
-                        borderColor: '#22c55e',
-                        tension: 0.4
-                    },
-                    {
-                        label: '铁粉空间',
-                        data: data3Days['铁粉空间'].retention.slice(0, 2),
-                        borderColor: '#fb923c',
-                        tension: 0.4
-                    }
-                ]
-            },
-            options: chartConfig
-        });
-
-        // ARPU 图表
-        new Chart(document.getElementById('arpuChart'), {
+        const dauCtx = document.getElementById('dauChart').getContext('2d');
+        new Chart(dauCtx, {
             type: 'bar',
             data: {
                 labels: ['TikTok', '小红书', 'PH·Prem', '铁粉空间'],
                 datasets: [{
-                    label: 'ARPU (元)',
-                    data: [0.090, 0.063, 0.115, 0.070],
-                    backgroundColor: [
-                        'rgba(96, 165, 250, 0.6)',
-                        'rgba(167, 139, 250, 0.6)',
-                        'rgba(34, 197, 94, 0.6)',
-                        'rgba(251, 146, 60, 0.6)'
-                    ]
+                    label: 'DAU',
+                    data: [186938, 58066, 23104, 18386],
+                    backgroundColor: ['#60a5fa', '#34d399', '#fbbf24', '#f87171']
                 }]
-            },
-            options: chartConfig
-        });
-
-        
-        // 周期规律图表
-        new Chart(document.getElementById('weeklyPatternChart'), {
-            type: 'line',
-            data: {
-                labels: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-                datasets: [
-                    {
-                        label: 'DAU (千)',
-                        data: [85.9, 86.0, 88.7, 87.3, 101.6, 117.2, 114.0],
-                        borderColor: '#60a5fa',
-                        backgroundColor: 'rgba(96, 165, 250, 0.1)',
-                        tension: 0.4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: '新增 (千)',
-                        data: [23.2, 23.0, 23.5, 23.3, 30.3, 38.3, 33.6],
-                        borderColor: '#a78bfa',
-                        backgroundColor: 'rgba(167, 139, 250, 0.1)',
-                        tension: 0.4,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: '充值 (千元)',
-                        data: [10.1, 8.3, 9.6, 8.5, 10.7, 11.4, 12.1],
-                        borderColor: '#22c55e',
-                        backgroundColor: 'rgba(34, 197, 94, 0.1)',
-                        tension: 0.4,
-                        yAxisID: 'y1'
-                    }
-                ]
             },
             options: {
                 responsive: true,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                plugins: {
-                    legend: { labels: { color: '#e2e8f0' } },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                if (context.parsed.y !== null) {
-                                    label += context.parsed.y.toFixed(1);
-                                }
-                                return label;
-                            }
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        ticks: { color: '#94a3b8' },
-                        grid: { color: 'rgba(148, 163, 184, 0.1)' },
-                        title: {
-                            display: true,
-                            text: 'DAU / 新增 (千)',
-                            color: '#94a3b8'
-                        }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        ticks: { color: '#94a3b8' },
-                        grid: { display: false },
-                        title: {
-                            display: true,
-                            text: '充值 (千元)',
-                            color: '#94a3b8'
-                        }
-                    },
-                    x: {
-                        ticks: { color: '#94a3b8' },
-                        grid: { color: 'rgba(148, 163, 184, 0.1)' }
-                    }
-                }
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: '#374151' }, ticks: { color: '#9ca3af' } }, x: { grid: { display: false }, ticks: { color: '#9ca3af' } } }
             }
         });
-
-
-        // 平台筛选功能
-        function filterPlatform(platform) {
-            // 更新按钮状态
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.textContent === platform) {
-                    btn.classList.add('active');
-                }
-            });
-
-            // TODO: 实现筛选逻辑（根据选择的平台显示/隐藏数据）
-            console.log('筛选平台:', platform);
-        }
-
-        // 数据导出功能
-        function exportData() {
-            const csv = [
-                ['平台', 'DAU', '新增', '充值', 'ARPU'],
-                ['TikTok', 192502, 67277, 17380, 0.090],
-                ['小红书', 58419, 13524, 3670, 0.063],
-                ['PH·Prem', 23070, 4585, 2660, 0.115],
-                ['铁粉空间', 17914, 5980, 1260, 0.070]
-            ].map(row => row.join(',')).join('\n');
-
-            const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = '四平台数据_20260412.csv';
-            link.click();
-        }
+        
+        const chargeCtx = document.getElementById('chargeChart').getContext('2d');
+        new Chart(chargeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['TikTok', '小红书', 'PH·Prem', '铁粉空间'],
+                datasets: [{
+                    label: '充值收入(¥)',
+                    data: [17200.0, 6070.0, 2940.0, 900.0],
+                    backgroundColor: ['#60a5fa', '#34d399', '#fbbf24', '#f87171']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { legend: { display: false } },
+                scales: { y: { beginAtZero: true, grid: { color: '#374151' }, ticks: { color: '#9ca3af' } }, x: { grid: { display: false }, ticks: { color: '#9ca3af' } } }
+            }
+        });
     </script>
 </body>
 </html>
